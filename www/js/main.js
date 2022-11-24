@@ -21,6 +21,11 @@ function show_data() {
     }
 }
 
+function empty() {
+    document.getElementById("nama").value = "";
+    document.getElementById("alamat").value = "";
+}
+
 function update_list(transaction, results) {
     var listholder = document.getElementById("list_data");
     var i;
@@ -32,9 +37,10 @@ function update_list(transaction, results) {
 
         listholder.innerHTML +=
             `<tr>
-            <td>${row.nama}</td>
-            <td>${row.alamat}</td>
-            <td><a href="javascript:void(0);" onclick="edit_data(${row.id});">Update</a> | <a href="javascript:void(0);" onclick="hapus_data(${row.id});">Hapus</a></td>
+            <td class="text-center">${row.nama}</td>
+            <td class="text-center">${row.alamat}</td>
+            <td class="text-center"><a href="javascript:void(0);" class="btn btn-warning btn-sm" onclick="edit_data(${row.id});" data-toggle="modal" data-target="#exampleModal1"><i class="fa fa-pencil" aria-hidden="true"></i></a> 
+            <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="hapus_data(${row.id});"><i class="fa-solid fa-trash"></i></a></td>
             </tr>`;
     }
 }
@@ -49,6 +55,9 @@ function tambah_data() {
             mydb.transaction(t => {
                 t.executeSql("INSERT INTO person(nama,alamat) VALUES (?,?)", [input_nama, input_alamat]);
             });
+            $('#exampleModal').modal('hide');
+            show_data();
+
         } else {
             alert("nama dan alamat harus diisi");
         }
@@ -68,7 +77,7 @@ function hapus_data(id) {
 function edit_data(id) {
     if (mydb) {
         mydb.transaction(t => {
-            var formholder = document.getElementById("form_data");
+            var formholder = document.getElementById("form_data1");
             formholder.innerHTML = "";
 
             t.executeSql("SELECT * FROM person WHERE id = ?", [id], function(tx, results) {
@@ -76,17 +85,14 @@ function edit_data(id) {
                     `<form>
                         <input type="hidden" id="id_edit" value="${id}">
                         <div class="form-group">
-                            <label>Nama</label>
+                            <label>Nama Ruang</label>
                             <input type="text" class="form-control" id="nama_edit" value="${results.rows.item(0).nama}">
                         </div>
                         <div class="form-group">
-                            <label>Alamat</label>
+                            <label>Kapasitas</label>
                             <input type="text" class="form-control" id="alamat_edit" value="${results.rows.item(0).alamat}">
                         </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-warning" onclick="update_data();">Update</button>
-                            <button type="reset" class="btn btn-danger" onclick="location.reload();">Batal</button>
-                        </div>
+
                     </form>`
             });
         });
@@ -105,6 +111,8 @@ function update_data() {
             mydb.transaction(t => {
                 t.executeSql("UPDATE person SET nama=?, alamat=? WHERE id=?", [edit_nama, edit_alamat, edit_id]);
             });
+            $('#exampleModal1').modal('hide');
+            show_data();
         } else {
             alert("nama dan alamat harus diisi");
         }

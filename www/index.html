@@ -36,7 +36,13 @@
     <title>Aplikasi CRUD dengan WebSql</title>
 
     <!-- memanggil css dari bootstrap -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- javascript untuk bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
 </head>
 
 <body>
@@ -44,36 +50,19 @@
         <div class="row">
             <div class="col-sm-12">
                 <br />
-                <h3 class="text-center">Aplikasi CRUD</h3>
+                <h3 class="text-center">Daftar Ruangan FSM</h3>
                 <hr />
-
-                <h4>Input Data</h4>
-                <div id="form_data">
-                    <form>
-                        <div class="form-group">
-                            <label>Nama</label>
-                            <input type="text" class="form-control" id="nama" placeholder="Input Nama" />
-                        </div>
-                        <div class="form-group">
-                            <label>Alamat</label>
-                            <input type="text" class="form-control" id="alamat" placeholder="Input Alamat" />
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-warning" onclick="tambah_data();">Simpan</button>
-                            <button type="reset" class="btn btn-danger" onclick="location.reload()">Reset</button>
-                        </div>
-                    </form>
+                <!-- Button trigger modal -->
+                <div class="fixed-bottom d-flex justify-content-end m-4">
+                    <button type="button" class="btn btn-primary rounded-circle btn-lg" data-toggle="modal" data-target="#exampleModal" onclick=""><i class="fa-solid fa-plus"></i></button>
                 </div>
-                <hr />
-
-                <h4>Data Yang Telah Diinput</h4>
                 <div>
                     <table class="table">
-                        <thead>
+                        <thead class="thead-dark">
                             <tr>
-                                <th>Nama</th>
-                                <th>Alamat</th>
-                                <th>Aksi</th>
+                                <th class="text-center">Ruang</th>
+                                <th class="text-center">Qty</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="list_data"></tbody>
@@ -83,11 +72,55 @@
         </div>
     </div>
 
-    <!-- javascript untuk bootstrap -->
-    <script scr="js/bootstrap.min.js"></script>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <div id="form_data">
+                        <form>
+                            <div class="form-group">
+                                <label>Nama Ruang</label>
+                                <input type="text" class="form-control" id="nama" placeholder="Nama ruang" />
+                            </div>
+                            <div class="form-group">
+                                <label>Kapasitas</label>
+                                <input type="number" class="form-control" id="alamat" placeholder="Kapasitas" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="empty()">Close</button>
+                    <button type="button " id="save" class="btn btn-primary " onclick="tambah_data()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <div id="form_data1">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="empty()">Close</button>
+                    <button type="button " id="save" class="btn btn-primary " onclick="update_data()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- main js untuk function-function CRUD -->
-    <script src="js/main.js"></script>
+    <script src=" js/main.js "></script>
 </body>
 
 </html>
