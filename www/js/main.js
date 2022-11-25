@@ -1,7 +1,7 @@
 //Cek compatibility browser dalam menangani websql
 if (window.openDatabase) {
     //Membuat database, parameter: 1. nama database, 2.versi db, 3. deskripsi 4. ukuran database (dalam bytes) 1024 x 1024 = 1MB
-    var mydb = openDatabase("biodata", "0.1", "biodata peserta workshop", 1024 * 1024);
+    var mydb = openDatabase("RuangFSM", "0.1", "daftar ruangan FSM", 1024 * 1024);
 
     //membuat tabel person dengan SQL untuk database menggunakan function transaction
     mydb.transaction(t => {
