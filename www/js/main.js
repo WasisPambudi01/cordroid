@@ -5,7 +5,7 @@ if (window.openDatabase) {
 
     //membuat tabel person dengan SQL untuk database menggunakan function transaction
     mydb.transaction(t => {
-        t.executeSql("CREATE TABLE IF NOT EXISTS person (id INTEGER PRIMARY KEY ASC, nama TEXT, alamat TEXT)");
+        t.executeSql("CREATE TABLE IF NOT EXISTS fsm_room (id INTEGER PRIMARY KEY ASC, nama_ruang TEXT, kapasitas TEXT)");
     });
 } else {
     alert("WebSQL tidak didukung oleh browser ini!");
@@ -14,7 +14,7 @@ if (window.openDatabase) {
 function show_data() {
     if (mydb) {
         mydb.transaction(t => {
-            t.executeSql("SELECT * FROM person", [], update_list);
+            t.executeSql("SELECT * FROM fsm_room", [], update_list);
         });
     } else {
         alert("database tidak ditemukan")
@@ -22,8 +22,8 @@ function show_data() {
 }
 
 function empty() {
-    document.getElementById("nama").value = "";
-    document.getElementById("alamat").value = "";
+    document.getElementById("nama_ruang").value = "";
+    document.getElementById("kapasitas").value = "";
 }
 
 function update_list(transaction, results) {
@@ -37,8 +37,8 @@ function update_list(transaction, results) {
 
         listholder.innerHTML +=
             `<tr>
-            <td class="text-center">${row.nama}</td>
-            <td class="text-center">${row.alamat}</td>
+            <td class="text-center">${row.nama_ruang}</td>
+            <td class="text-center">${row.kapasitas}</td>
             <td class="text-center"><a href="javascript:void(0);" class="btn btn-warning btn-sm" onclick="edit_data(${row.id});" data-toggle="modal" data-target="#exampleModal1"><i class="fa fa-pencil" aria-hidden="true"></i></a> 
             <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="hapus_data(${row.id});"><i class="fa-solid fa-trash"></i></a></td>
             </tr>`;
@@ -48,18 +48,18 @@ function update_list(transaction, results) {
 //function untuk input data ke database
 function tambah_data() {
     if (mydb) {
-        var input_nama = document.getElementById("nama").value;
-        var input_alamat = document.getElementById("alamat").value;
+        var input_nama = document.getElementById("nama_ruang").value;
+        var input_alamat = document.getElementById("kapasitas").value;
 
         if (input_nama !== "" && input_alamat !== "") {
             mydb.transaction(t => {
-                t.executeSql("INSERT INTO person(nama,alamat) VALUES (?,?)", [input_nama, input_alamat]);
+                t.executeSql("INSERT INTO fsm_room(nama_ruang,kapasitas) VALUES (?,?)", [input_nama, input_alamat]);
             });
             $('#exampleModal').modal('hide');
+            sukses_tambah();
             show_data();
-
         } else {
-            alert("nama dan alamat harus diisi");
+            alert("nama ruang dan kapasitas harus diisi");
         }
     }
 }
@@ -67,8 +67,9 @@ function tambah_data() {
 function hapus_data(id) {
     if (mydb) {
         mydb.transaction(t => {
-            t.executeSql("DELETE FROM person WHERE id = ?", [id], show_data);
+            t.executeSql("DELETE FROM fsm_room WHERE id = ?", [id], show_data);
         });
+        sukses_hapus();
     } else {
         alert("database tidak ditemukan");
     }
@@ -80,17 +81,17 @@ function edit_data(id) {
             var formholder = document.getElementById("form_data1");
             formholder.innerHTML = "";
 
-            t.executeSql("SELECT * FROM person WHERE id = ?", [id], function(tx, results) {
+            t.executeSql("SELECT * FROM fsm_room WHERE id = ?", [id], function(tx, results) {
                 formholder.innerHTML =
                     `<form>
                         <input type="hidden" id="id_edit" value="${id}">
                         <div class="form-group">
                             <label>Nama Ruang</label>
-                            <input type="text" class="form-control" id="nama_edit" value="${results.rows.item(0).nama}">
+                            <input type="text" class="form-control" id="nama_edit" value="${results.rows.item(0).nama_ruang}">
                         </div>
                         <div class="form-group">
                             <label>Kapasitas</label>
-                            <input type="text" class="form-control" id="alamat_edit" value="${results.rows.item(0).alamat}">
+                            <input type="text" class="form-control" id="kapasitas_edit" value="${results.rows.item(0).kapasitas}">
                         </div>
 
                     </form>`
@@ -105,20 +106,75 @@ function update_data() {
     if (mydb) {
         var edit_id = document.getElementById("id_edit").value;
         var edit_nama = document.getElementById("nama_edit").value;
-        var edit_alamat = document.getElementById("alamat_edit").value;
+        var edit_kapasitas = document.getElementById("kapasitas_edit").value;
 
-        if (edit_nama !== "" && edit_alamat !== "") {
+        if (edit_nama !== "" && edit_kapasitas !== "") {
             mydb.transaction(t => {
-                t.executeSql("UPDATE person SET nama=?, alamat=? WHERE id=?", [edit_nama, edit_alamat, edit_id]);
+                t.executeSql("UPDATE fsm_room SET nama_ruang=?, kapasitas=? WHERE id=?", [edit_nama, edit_kapasitas, edit_id]);
             });
             $('#exampleModal1').modal('hide');
+            sukses_edit();
             show_data();
         } else {
-            alert("nama dan alamat harus diisi");
+            alert("nama ruang dan kapasitas harus diisi");
         }
     } else {
         alert("database tidak ditemukan");
     }
+}
+
+function sukses_tambah() {
+
+    swal({
+
+        title: "Berhasil!",
+
+        text: "Ruangan berhasil ditambahkan",
+
+        icon: "success",
+
+        timer: 2000,
+
+        button: false
+
+    });
+
+}
+
+function sukses_edit() {
+
+    swal({
+
+        title: "Berhasil!",
+
+        text: "Ruangan berhasil diperbarui",
+
+        icon: "success",
+
+        timer: 2000,
+
+        button: false
+
+    });
+
+}
+
+function sukses_hapus() {
+
+    swal({
+
+        title: "Berhasil!",
+
+        text: "Ruangan berhasil dihapus",
+
+        icon: "success",
+
+        timer: 2000,
+
+        button: false
+
+    });
+
 }
 
 show_data();
